@@ -1,4 +1,4 @@
-# Projecto BankAccount
+# Proyecto BankAccount
 
 El caso de uso es el siguiente:
 
@@ -12,6 +12,6 @@ Se requiere:
 
    * Una pantalla de Apertura de Cuenta de Ahorro. Atributos mínimos: Número de cuenta y Saldo actual.
 
-   * Una pantalla (o las que consideres) para realizar Depósitos y Retiros. Atributos mínimos: Monto de la transacción.
+   * Una pantalla (o las que consideres) para realizar Depósitos y Retiros. Atributos mínimos: Monto de la transacción y número de la cuenta.
 
    * Alguna forma de ver un historial de estas transacciones, puede ser un reporte, o simplemente ver directamente en el repositorio de datos el cómo se van registrando y cómo se afecta el saldo de la cuenta.

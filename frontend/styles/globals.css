@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
-</style> 
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 html,
 body {
   padding: 0;
@@ -8,12 +8,22 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-a , p {
+a {
   color: inherit;
   text-decoration: none;
   font-family: 'Indie Flower', cursive;
 }
-
+p {
+  font-family: 'Raleway', sans-serif;
+}
 * {
   box-sizing: border-box;
+}
+
+.error-message  {
+  margin-top: 4px;
+  color:  #ed2939;
+}
+.error-message::before {
+  content: '• ';
 }
