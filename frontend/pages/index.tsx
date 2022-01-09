@@ -31,37 +31,17 @@ const Home: NextPage = () => {
       </Head>
       
       <StyledNavBar>
-        <div className='responsive'>
-          <Menu >
-            <MenuButton
-              as={IconButton}
-              aria-label='Options'
-              icon={<HamburgerIcon className="burger-icon"/>}
-              variant='outline'
-            />
-            <MenuList>
-              { menuList.map( (m,i) =>{
-                  return (
-                    <MenuItem key={i}>
-                      <a href={m.url}>{m.title}</a>
-                    </MenuItem>
-                  )
-                })
-              }
-            </MenuList>
-          </Menu>
-        </div>
 
-        <HStack spacing='24px' className="expanded">
+        <div className="topnav">
           { menuList.map( (m,i) =>{
               return (
-                <div className='linkContainer' key={i}>
-                  <a href={m.url}>{m.title}</a>
+                <div className="tab-nav" key="i">
+                  <a  href={m.url}>{m.title}</a>
                 </div>
               )
             })
           }
-        </HStack>
+        </div>
 
       </StyledNavBar>
 

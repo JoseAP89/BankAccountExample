@@ -1,44 +1,39 @@
 import styled from 'styled-components';
 
 const StyledNavBar = styled.div`
+.topnav{
     background-color:#333;
-    a {
-        color: #eaeaea
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    .tab-nav{
+        display: flex;
+        align-items: center;
+        a {
+            color: #eaeaea;
+            padding: 20px;
+            font-size: 20px;
+        }   
     }
-    .responsive {
-        display: none;
+    .tab-nav:hover {
+        background-color: #778899;
     }
-    .expanded {
-        .linkContainer{
-            width: 140px;
-            height: 60px;
-            padding: 10px;
-            a {
-                width: 100%;
-                height: 100%;
-            }
-        }
-        .linkContainer:hover {
-            background-color: #4f86f7;
-        }
-    }
+
 
     @media (max-width: 600px) { 
-        .expanded {
-            display: none;
+        display: flex;
+        flex-direction: column;
+        height:fit-content;
+        .tab-nav{
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .responsive {
-            display: block;
-            a {
-                color: black;
-            }
-            .burger-icon {
-                color: white;
-            }
-        }
+
     }
 
-
+}
 `;
 
 export {StyledNavBar}; 
