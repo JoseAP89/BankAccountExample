@@ -75,13 +75,13 @@ const Transactions: NextPage = () => {
 
                   <FormLabel htmlFor='amountD' mt={4}>Monto</FormLabel>
                   <Input id='amountD' type='number' w="45vw"
-                    {...registerD("amount", { required: true, min: 100 })}
+                    {...registerD("amount", { required: true, max: 20_000 })}
                   />
                   {!!errorsD?.amount  && errorsD.amount.type=="required" &&
                     <div className="error-message">Monto es requerido.</div>
                   }
-                  {!!errorsD?.amount  && errorsD.amount.type==="min" &&
-                    <div className="error-message">Monto  debe ser mayor o igual a $100 MN.</div>
+                  {!!errorsD?.amount  && errorsD.amount.type==="max" &&
+                    <div className="error-message">Monto  debe ser menor o igual a $20,000.00 MN.</div>
                   }
                   <FormHelperText>Monto a depositar a tu cuenta de ahorros.</FormHelperText>
 
@@ -112,13 +112,13 @@ const Transactions: NextPage = () => {
 
                   <FormLabel htmlFor='amountR' mt={4}>Monto</FormLabel>
                   <Input id='amountR' type='number' w="45vw"
-                    {...registerR("amount", { required: true, min: 100 })}
+                    {...registerR("amount", { required: true, max: 20_000 })}
                   />
                   {!!errorsR?.amount  && errorsR.amount.type=="required" &&
                     <div className="error-message">Monto es requerido.</div>
                   }
-                  {!!errorsR?.amount  && errorsR.amount.type==="min" &&
-                    <div className="error-message">Monto  debe ser mayor o igual a $100 MN.</div>
+                  {!!errorsR?.amount  && errorsR.amount.type==="max" &&
+                    <div className="error-message">Monto  debe ser menor o igual a $20,000.00 MN.</div>
                   }
                   <FormHelperText>Monto a retirar de tu cuenta de ahorros.</FormHelperText>
 
