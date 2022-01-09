@@ -40,6 +40,7 @@ const SignUp: NextPage = () => {
         <Heading as="h2" size="md">Hazte nuestro cliente de forma sencilla y rápida</Heading>
 
         <form onSubmit={handleSubmit(onSubmit)}>
+
           <FormControl mt={4}  >
             <FormLabel htmlFor='fullname'>Nombre completo</FormLabel>
             <Input id='fullname' type='text'  w="45vw" 
@@ -56,6 +57,7 @@ const SignUp: NextPage = () => {
             }
             <FormHelperText>Escribe tu nombre completo.</FormHelperText>
 
+
             <FormLabel htmlFor='id' mt={4}>Número de Identificación</FormLabel>
             <Input id='id' type='text' w="45vw"
               {...register("id", { required: true, maxLength: 18 })}
@@ -66,7 +68,7 @@ const SignUp: NextPage = () => {
             {!!errors?.id  && errors.id.type==="maxLength" &&
               <div className="error-message">Id no debe tener más de 18 carácteres.</div>
             }
-            <FormHelperText>Escribe tu curp completo</FormHelperText>
+            <FormHelperText>Id proporcionado por su ejecutivo de cuenta.</FormHelperText>
 
             <Button colorScheme='blue' my={3} type="submit">Enviar</Button>
           </FormControl>

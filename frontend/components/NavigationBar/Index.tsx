@@ -10,7 +10,7 @@ const NavigationBar = () => {
 	    { title: "Inicio", url: "/"},
 	    { title: "Alta", url: "/signup"},
 	    { title: "Apertura", url: "/opensavingsaccount"},
-	    { title: "Transacciones", url: "#/transactions"}
+	    { title: "Transacciones", url: "/transactions"}
 	 ];
 
 	return (

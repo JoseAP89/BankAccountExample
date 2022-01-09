@@ -50,7 +50,8 @@ const OpenSavingsAccount: NextPage = () => {
             {!!errors?.account  && errors.account.type==="required" &&
               <div className="error-message">Número de cuenta es requerido.</div>
             }
-            <FormHelperText>Número proporcionado por su ejecutivo de cuenta	.</FormHelperText>
+            <FormHelperText>Número proporcionado por su ejecutivo de cuenta.</FormHelperText>
+
 
             <FormLabel htmlFor='amount' mt={4}>Monto inicial de apertura</FormLabel>
             <Input id='amount' type='number' w="45vw"
