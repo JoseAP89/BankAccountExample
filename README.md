@@ -19,3 +19,13 @@ Se requiere:
 ## Diagrama de clases de la BD
 
 ![picture alt](https://github.com/JoseAP89/BankAccountExample/blob/main/diagrama_clases.png "diagrama")
+
+## Instrucciones de instalación en local
+
+* Descargar el proyecto usando git.
+* Correr npm install en la carpeeta de front.
+* Instalar Postgresql, ya que es la BD utilizada.
+* Con tu usuario postgres, default, crear la base de datos 'savings' y al usuario 'bank' con la contraseña indicada en el _conectionString del archivo BankOps.cs.
+* Después correr el archivo migrations.sql en la base de datos, que creará todas las tablas, procedimientos, triggers y otorgara los permisios necesarios al usuario 'bank'.
+* Correr el back con el commando dotnet run y en la carpeta de front el comando npm run start.
+* Ir a localhost:3000 para comenzar a usar la app.
