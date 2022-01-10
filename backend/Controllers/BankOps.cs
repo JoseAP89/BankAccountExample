@@ -159,6 +159,12 @@ public class BankOpsController : ControllerBase
                         NewAmount = newAmount
                     }
                 ).ConfigureAwait(false);
+                sqlQuery = "UPDATE account SET modifiedAt=current_timestamp WHERE accountID=@AccountID";
+                rowsAffected = await connection.ExecuteAsync(sqlQuery,
+                    new {
+                        AccountID = account.AccountID,
+                    }
+                ).ConfigureAwait(false);
                 if (rowsAffected == 0)
                 {
                    return NoContent(); 
