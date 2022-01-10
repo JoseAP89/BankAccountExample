@@ -48,8 +48,13 @@ const Transactions: NextPage = () => {
 
   const onSubmitM = (data: any) => {
     TransactionService.getOperationReport(data.clientid, data.accountid).then( (response) => {
-      if (!!response ) {
+      if (!!response?.data && response.data.lenght>0) {
         setOperationReport(response.data as Array<OperationReport>);
+      } else if(!!response?.data || response.data.lenght==0){
+        setErrorMsg(true);
+        setTimeout(() => {
+          setErrorMsg(false);
+        }, 1000 * 5);
       }
     }).catch( err =>{
       console.log(err);
@@ -76,7 +81,7 @@ const Transactions: NextPage = () => {
         <Tabs variant='soft-rounded' colorScheme='green'>
           <TabList>
             <Tab>Depósitos / Retiros</Tab>
-            <Tab>Movimientos</Tab>
+            <Tab onClick={ ()=> setErrorMsg(false)}>Movimientos</Tab>
           </TabList>
           <TabPanels>
 
@@ -215,6 +220,12 @@ const Transactions: NextPage = () => {
                 </Tbody>
               </Table>
               </>
+              }
+              { errorMsg &&
+                <Alert status='error'>
+                  <AlertIcon />
+                  Hubo un problema con su consulta.
+                </Alert>
               }
 
             </TabPanel>
