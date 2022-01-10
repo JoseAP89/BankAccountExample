@@ -18,15 +18,15 @@ const Transactions: NextPage = () => {
   const { register: registerM, handleSubmit: handleSubmitM, formState: { errors: errorsM } } = useForm();
 
 
-  const onSubmitR = (data) => {
+  const onSubmitR = (data: any) => {
     console.log(JSON.stringify(data));
     
   };
-  const onSubmitD = (data) => { 
+  const onSubmitD = (data: any) => { 
     console.log(JSON.stringify(data));
     
   };
-  const onSubmitM = (data) => { 
+  const onSubmitM = (data: any) => { 
     console.log(JSON.stringify(data));
     
   };
@@ -60,7 +60,7 @@ const Transactions: NextPage = () => {
               <form onSubmit={handleSubmitD(onSubmitD)}>
                 <FormControl mt={4}  >
 
-                  <FormLabel htmlFor='accountD'>Número de cuenta</FormLabel>
+                  <FormLabel htmlFor='accountD'>Número de cuenta a Depositar</FormLabel>
                   <Input id='accountD' type='number'  w="45vw" 
                     {...registerD("account", { required: true, pattern: /^[0-9]+$/i })}
                   />
@@ -70,7 +70,7 @@ const Transactions: NextPage = () => {
                   {!!errorsD?.account  && errorsD.account.type==="required" &&
                     <div className="error-message">Número de cuenta es requerido.</div>
                   }
-                  <FormHelperText>Número de su cuenta de ahorros.</FormHelperText>
+                  <FormHelperText>Número de cuenta destinatario.</FormHelperText>
 
 
                   <FormLabel htmlFor='amountD' mt={4}>Monto</FormLabel>
@@ -134,15 +134,16 @@ const Transactions: NextPage = () => {
               <form onSubmit={handleSubmitM(onSubmitM)}>
                 <FormControl mt={4}  >
 
-                  <FormLabel htmlFor='id' mt={4}>Número de Identificación</FormLabel>
-                  <Input id='id' type='text' w="45vw"
-                    {...registerM("id", { required: true, maxLength: 18 })}
+
+                  <FormLabel htmlFor='clientid' mt={4}>Número de Identificación</FormLabel>
+                  <Input id='clientid' type='number' w="45vw"
+                    {...registerM("clientid", { required: true, pattern: /^[0-9]+$/i })}
                   />
-                  {!!errorsM?.id  && errorsM.id.type=="required" &&
+                  {!!errorsM?.clientid  && errorsM.clientid.type=="required" &&
                     <div className="error-message">Id es requerido.</div>
                   }
-                  {!!errorsM?.id  && errorsM.id.type==="maxLength" &&
-                    <div className="error-message">Id no debe tener más de 18 carácteres.</div>
+                  {!!errorsM?.clientid  && errorsM.clientid.type==="pattern" &&
+                    <div className="error-message">Número de Identificación solo debe tener valores numericos enteros.</div>
                   }
                   <FormHelperText>Id proporcionado por su ejecutivo de cuenta.</FormHelperText>
 

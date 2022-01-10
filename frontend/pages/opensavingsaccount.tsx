@@ -15,7 +15,7 @@ const OpenSavingsAccount: NextPage = () => {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     console.log(JSON.stringify(data));
     
   };
