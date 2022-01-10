@@ -94,6 +94,9 @@ const Transactions: NextPage = () => {
                       <option value={-1}>Retiro</option>
                     </Select>
                   </FormControl>
+                  {!!errorsD?.flux  && errorsD.flux.type==="required" &&
+                    <div className="error-message">Dato de tipo de operación es requerido</div>
+                  }
 
                   <FormLabel htmlFor='accountidD' mt={4}>Número de cuenta a depositar</FormLabel>
                   <Input id='accountidD' type='number'  w="45vw" 
