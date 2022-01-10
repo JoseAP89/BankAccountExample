@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react'
 import { Container, FormControl,FormLabel,Input,FormHelperText,
   Button, FormErrorMessage
 } from '@chakra-ui/react'
+import Client from '../models/client';
+import TransactionService from '../services/transaction'
 
 
 const SignUp: NextPage = () => {
@@ -16,11 +18,16 @@ const SignUp: NextPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = (data: any) => {
-    console.log(JSON.stringify(data));
-    
+    let client : Client = {
+      fullname : data.fullname,
+      clientid : Number(data.clientid),
+    }
+    TransactionService.createClient(client).then( (response) => {
+      console.log(response);
+    }).catch( err =>{
+      console.log(err);
+    })
   };
-  console.log(errors);
-  console.log(!!errors?.clientid);
 
   return (
     <>
@@ -39,15 +46,15 @@ const SignUp: NextPage = () => {
           <FormControl mt={4}  >
             <FormLabel htmlFor='fullname'>Nombre completo</FormLabel>
             <Input id='fullname' type='text'  w="45vw" 
-              {...register("fullName", { required: true, maxLength: 100, minLength: 3 })}
+              {...register("fullname", { required: true, maxLength: 100, minLength: 3 })}
             />
-            {!!errors?.fullName  && errors.fullName.type==="required" &&
+            {!!errors?.fullname  && errors.fullname.type==="required" &&
               <div className="error-message">Nombre completo es requerido.</div>
             }
-            {!!errors?.fullName  && errors.fullName.type==="maxLength" &&
+            {!!errors?.fullname  && errors.fullname.type==="maxLength" &&
               <div className="error-message">Nombre no debe tener más de 100 carácteres.</div>
             }
-            {!!errors?.fullName  && errors.fullName.type==="minLength" &&
+            {!!errors?.fullname  && errors.fullname.type==="minLength" &&
               <div className="error-message">Nombre debe tener más de 2 carácteres.</div>
             }
             <FormHelperText>Escribe tu nombre completo.</FormHelperText>

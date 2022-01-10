@@ -41,6 +41,9 @@ CREATE TABLE operation (
     ModifiedAt TIMESTAMP
 );
 
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO bank;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO bank;
+
 -- funcion para cambiar la tabla operation al agregarse un cliente
 CREATE OR REPLACE FUNCTION func_add_client()
   RETURNS trigger AS
