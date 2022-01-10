@@ -1,7 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Heading } from '@chakra-ui/react'
+import { Alert, AlertIcon, Heading, Select } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
+import MoneyFlux from "../models/moneyflux"
 
 //import {CheckCircleIcon} from '@chakra-ui/icons'
 
@@ -9,30 +10,46 @@ import { useEffect, useState } from 'react'
 import { Container, FormControl,FormLabel,Input,FormHelperText,
   Button, FormErrorMessage,Tabs, TabPanels, TabPanel, TabList, Tab
 } from '@chakra-ui/react'
+import TransactionService from '../services/transaction';
+import Account from '../models/account';
 
 
 const Transactions: NextPage = () => {
-  // D paradepositos & R para retiros & M para movimientos
-  const { register: registerR, handleSubmit: handleSubmitR, formState: { errors: errorsR } } = useForm();
+  const [successMsg, setSuccessMsg] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<boolean>(false);
   const { register: registerD, handleSubmit: handleSubmitD, formState: { errors: errorsD } } = useForm();
   const { register: registerM, handleSubmit: handleSubmitM, formState: { errors: errorsM } } = useForm();
 
+  const onSubmitD = (data: any) => {
+    let bag : Account = {
+      accountid : Number(data.accountid),
+      totalamount : Number(data.amount) * data.flux,
+      clientid: 0
+    }
+    TransactionService.updateAccount(bag).then( (response) => {
+      console.log(response);
+      if (!!response && response.statusText === 'Created') {
+        setSuccessMsg(true);
+        setTimeout(() => {
+          setSuccessMsg(false);
+        }, 1000 * 5);
+      }
+    }).catch( err =>{
+      console.log(err);
+      setErrorMsg(true);
+      setTimeout(() => {
+        setErrorMsg(false);
+      }, 1000 * 5);
+    })
+    
+  };
 
-  const onSubmitR = (data: any) => {
-    console.log(JSON.stringify(data));
-    
-  };
-  const onSubmitD = (data: any) => { 
-    console.log(JSON.stringify(data));
-    
-  };
   const onSubmitM = (data: any) => { 
     console.log(JSON.stringify(data));
     
   };
 
   console.log("Err Depositos: ",errorsD);
-  console.log("Err Retiros: ",errorsR);
   console.log("Err Movimientos: ",errorsM);
 
   return (
@@ -48,83 +65,68 @@ const Transactions: NextPage = () => {
 
         <Tabs variant='soft-rounded' colorScheme='green'>
           <TabList>
-            <Tab>Depósitos</Tab>
-            <Tab>Retiro</Tab>
+            <Tab>Depósitos / Retiros</Tab>
             <Tab>Movimientos</Tab>
           </TabList>
           <TabPanels>
 
             <TabPanel>
-              <Heading as="h2" size="md">Deposita a tu cuenta hasta por $20,000 MN de forma efectiva.</Heading>
+              <Heading as="h2" size="md">Deposita o retira de tu cuenta hasta por $20,000 MN de forma efectiva.</Heading>
 
               <form onSubmit={handleSubmitD(onSubmitD)}>
                 <FormControl mt={4}  >
 
-                  <FormLabel htmlFor='accountD'>Número de cuenta a Depositar</FormLabel>
-                  <Input id='accountD' type='number'  w="45vw" 
-                    {...registerD("account", { required: true, pattern: /^[0-9]+$/i })}
+                  <FormControl>
+                    <FormLabel htmlFor='flux'>Operación financiera a realizar</FormLabel>
+                    <Select id='flux' placeholder='Seleccione la operación' w="45vw"
+                      {...registerD("flux", { required: true})}>
+                      <option value={1}>Depósito</option>
+                      <option value={-1}>Retiro</option>
+                    </Select>
+                  </FormControl>
+
+                  <FormLabel htmlFor='accountidD' mt={4}>Número de cuenta a depositar</FormLabel>
+                  <Input id='accountidD' type='number'  w="45vw" 
+                    {...registerD("accountid", { required: true, pattern: /^[0-9]+$/i })}
                   />
-                  {!!errorsD?.account  && errorsD.account.type==="pattern" &&
+                  {!!errorsD?.accountid  && errorsD.accountid.type==="pattern" &&
                     <div className="error-message">Número de cuenta solo debe tener valores numericos enteros.</div>
                   }
-                  {!!errorsD?.account  && errorsD.account.type==="required" &&
+                  {!!errorsD?.accountid  && errorsD.accountid.type==="required" &&
                     <div className="error-message">Número de cuenta es requerido.</div>
                   }
                   <FormHelperText>Número de cuenta destinatario.</FormHelperText>
 
 
-                  <FormLabel htmlFor='amountD' mt={4}>Monto</FormLabel>
-                  <Input id='amountD' type='number' w="45vw"
-                    {...registerD("amount", { required: true, max: 20_000 })}
+                  <FormLabel htmlFor='amount' mt={4}>Monto</FormLabel>
+                  <Input id='amount' type='number' w="45vw"
+                    {...registerD("amount", { required: true, max: 20_000, min: 100 })}
                   />
                   {!!errorsD?.amount  && errorsD.amount.type=="required" &&
                     <div className="error-message">Monto es requerido.</div>
                   }
-                  {!!errorsD?.amount  && errorsD.amount.type==="max" &&
-                    <div className="error-message">Monto  debe ser menor o igual a $20,000.00 MN.</div>
+                  {!!errorsD?.amount  && (errorsD.amount.type==="max" || errorsD.amount.type==="min" ) &&
+                    <div className="error-message">Monto  debe estar en el rango de $100.00 - $20,000.00 MN.</div>
                   }
                   <FormHelperText>Monto a depositar a tu cuenta de ahorros.</FormHelperText>
 
                   <Button colorScheme='blue' my={3} type="submit">Enviar</Button>
                 </FormControl>
               </form>
-            </TabPanel>
 
-
-            <TabPanel>
-              <Heading as="h2" size="md">Retira de tu cuenta hasta $20,000 MN.</Heading>
-
-              <form onSubmit={handleSubmitR(onSubmitD)}>
-                <FormControl mt={4}  >
-
-                  <FormLabel htmlFor='accountR'>Número de cuenta</FormLabel>
-                  <Input id='accountR' type='number'  w="45vw" 
-                    {...registerR("account", { required: true, pattern: /^[0-9]+$/i })}
-                  />
-                  {!!errorsR?.account  && errorsR.account.type==="pattern" &&
-                    <div className="error-message">Número de cuenta solo debe tener valores numericos enteros.</div>
-                  }
-                  {!!errorsR?.account  && errorsR.account.type==="required" &&
-                    <div className="error-message">Número de cuenta es requerido.</div>
-                  }
-                  <FormHelperText>Número de su cuenta de ahorros.</FormHelperText>
-
-
-                  <FormLabel htmlFor='amountR' mt={4}>Monto</FormLabel>
-                  <Input id='amountR' type='number' w="45vw"
-                    {...registerR("amount", { required: true, max: 20_000 })}
-                  />
-                  {!!errorsR?.amount  && errorsR.amount.type=="required" &&
-                    <div className="error-message">Monto es requerido.</div>
-                  }
-                  {!!errorsR?.amount  && errorsR.amount.type==="max" &&
-                    <div className="error-message">Monto  debe ser menor o igual a $20,000.00 MN.</div>
-                  }
-                  <FormHelperText>Monto a retirar de tu cuenta de ahorros.</FormHelperText>
-
-                  <Button colorScheme='blue' my={3} type="submit">Enviar</Button>
-                </FormControl>
-              </form>
+              { successMsg &&
+                <Alert status='success'>
+                  <AlertIcon />
+                  Transacción realizada correctamente.
+                </Alert>
+              }
+              { errorMsg &&
+                <Alert status='error'>
+                  <AlertIcon />
+                  Hubo un problema guardando su información.
+                </Alert>
+              }
+              
             </TabPanel>
 
 
@@ -148,20 +150,21 @@ const Transactions: NextPage = () => {
                   <FormHelperText>Id proporcionado por su ejecutivo de cuenta.</FormHelperText>
 
 
-                  <FormLabel htmlFor='account' mt={4}>Número de cuenta</FormLabel>
-                  <Input id='account' type='number'  w="45vw" 
-                    {...registerM("account", { required: true, pattern: /^[0-9]+$/i })}
+                  <FormLabel htmlFor='accountid' mt={4}>Número de cuenta</FormLabel>
+                  <Input id='accountid' type='number'  w="45vw" 
+                    {...registerM("accountid", { required: true, pattern: /^[0-9]+$/i })}
                   />
-                  {!!errorsM?.account  && errorsM.account.type==="pattern" &&
+                  {!!errorsM?.accountid  && errorsM.accountid.type==="pattern" &&
                     <div className="error-message">Número de cuenta solo debe tener valores numericos enteros.</div>
                   }
-                  {!!errorsM?.account  && errorsM.account.type==="required" &&
+                  {!!errorsM?.accountid  && errorsM.accountid.type==="required" &&
                     <div className="error-message">Número de cuenta es requerido.</div>
                   }
                   <FormHelperText>Número proporcionado por su ejecutivo de cuenta .</FormHelperText>
 
                   <Button colorScheme='blue' my={3} type="submit">Enviar</Button>
                 </FormControl>
+
               </form>
             </TabPanel>
 
@@ -175,4 +178,5 @@ const Transactions: NextPage = () => {
   )
 }
 
-export default Transactions
+export default Transactions;
+

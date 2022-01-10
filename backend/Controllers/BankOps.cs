@@ -138,4 +138,46 @@ public class BankOpsController : ControllerBase
         }
     }
 
+    // PUT: api/BankOps/account/5
+    [HttpPut("account/{accountid}")]
+    public async Task<IActionResult> UpdateAccount(Account account)
+    {   // account en este context representa una cuenta temporal que se sumara (+/-) a la cuenta destino
+        try
+        {
+            using (var connection = new NpgsqlConnection(_stringConection))
+            {
+                connection.Open();
+                var totalAmount = await connection.QueryFirstAsync<decimal>($"Select totalAmount From account WHERE accountID ={account.AccountID}").ConfigureAwait(false); 
+                decimal newAmount = totalAmount + account.TotalAmount ;
+                if(newAmount < 0){
+                    return BadRequest("La cuenta no tiene los recursos suficientes para realizar el retiro.");
+                }
+                string sqlQuery = "UPDATE account SET totalAmount=@NewAmount WHERE accountID=@AccountID";
+                int rowsAffected = await connection.ExecuteAsync(sqlQuery,
+                    new {
+                        AccountID = account.AccountID,
+                        NewAmount = newAmount
+                    }
+                ).ConfigureAwait(false);
+                if (rowsAffected == 0)
+                {
+                   return NoContent(); 
+                }
+                return CreatedAtAction(
+                    nameof(GetAccount),
+                    new { accountid = account.AccountID },
+                    account
+                );
+
+            }
+            
+        }
+        catch (System.Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+
 }
+// select o.clientid, c.fullname, o.transactionid, t.name, o.amount from operation o join transaction t on t.transactionid=o.transactionid join client c on c.clientid=o.clientid order  by o.createdat;

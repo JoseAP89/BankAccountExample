@@ -4,7 +4,8 @@ import axios from 'axios';
 
 const TransactionService = {
     createClient,
-    createAccount
+    createAccount,
+    updateAccount
 }
 
 const backendsrc = "https://localhost:7113"
@@ -21,6 +22,13 @@ async function createAccount(data: Account): Promise<any>{
     // Default options are marked with *
     console.log(data);
     return axios.post(url,data);
+}
+
+async function updateAccount(data: Account): Promise<any>{
+    const url = `${backendsrc}/api/BankOps/account/${data.accountid}`;
+    // Default options are marked with *
+    console.log(data);
+    return axios.put(url,data);
 }
 
 export default TransactionService;
