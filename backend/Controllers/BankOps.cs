@@ -72,4 +72,70 @@ public class BankOpsController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    // GET: api/BankOps/account/5
+    [HttpGet("account/{accountid}")]
+    public async Task<ActionResult<Account>> GetAccount(long accountid)
+    {
+        try
+        {
+            using (var connection = new NpgsqlConnection(_stringConection))
+            {
+                connection.Open();
+                var account = await connection.QueryFirstAsync<Account>($"Select * From account WHERE accountID ={accountid}").ConfigureAwait(false); 
+                if (account == null)
+                {
+                   return NoContent(); 
+                }
+                return account;
+            }
+        }
+        catch (System.Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+    }
+
+    // POST: api/BankOps/account
+    [HttpPost("account")]
+    public async Task<IActionResult> CreateAccount(Account account)
+    {
+        try
+        {
+            using (var connection = new NpgsqlConnection(_stringConection))
+            {
+                connection.Open();
+                var count = await connection.QueryFirstAsync<long>($"Select count(*) From client WHERE clientID ={account.ClientID}").ConfigureAwait(false); 
+                if (count == 0)
+                {
+                    return BadRequest("No existe el cliente con id " + account.ClientID + ". Solo se pueden crear cuentas de ahorro para clientes existentes.");
+                }
+                string sqlQuery = "Insert Into account (AccountID, ClientID, TotalAmount) Values(@AccountID, @ClientID, @TotalAccount)";
+                int rowsAffected = await connection.ExecuteAsync(sqlQuery,
+                    new {
+                        AccountID = account.AccountID,
+                        ClientID= account.ClientID,
+                        TotalAmount = account.TotalAmount
+                    }
+                ).ConfigureAwait(false);
+                if (rowsAffected == 0)
+                {
+                   return NoContent(); 
+                }
+                return CreatedAtAction(
+                    nameof(GetClient),
+                    new { accountid = account.AccountID },
+                    account
+                );
+
+            }
+            
+        }
+        catch (System.Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
 }
