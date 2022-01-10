@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Alert, AlertIcon, Heading, Select } from '@chakra-ui/react'
+import { Alert, AlertIcon, Heading, Select, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 import MoneyFlux from "../models/moneyflux"
 
@@ -12,11 +12,13 @@ import { Container, FormControl,FormLabel,Input,FormHelperText,
 } from '@chakra-ui/react'
 import TransactionService from '../services/transaction';
 import Account from '../models/account';
+import OperationReport from '../models/operationreport';
 
 
 const Transactions: NextPage = () => {
   const [successMsg, setSuccessMsg] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<boolean>(false);
+  const [operationReport, setOperationReport] = useState<Array<OperationReport>>([]);
   const { register: registerD, handleSubmit: handleSubmitD, formState: { errors: errorsD } } = useForm();
   const { register: registerM, handleSubmit: handleSubmitM, formState: { errors: errorsM } } = useForm();
 
@@ -44,13 +46,21 @@ const Transactions: NextPage = () => {
     
   };
 
-  const onSubmitM = (data: any) => { 
-    console.log(JSON.stringify(data));
+  const onSubmitM = (data: any) => {
+    TransactionService.getOperationReport(data.clientid, data.accountid).then( (response) => {
+      if (!!response ) {
+        setOperationReport(response.data as Array<OperationReport>);
+      }
+    }).catch( err =>{
+      console.log(err);
+      setErrorMsg(true);
+      setTimeout(() => {
+        setErrorMsg(false);
+      }, 1000 * 5);
+    })
     
   };
 
-  console.log("Err Depositos: ",errorsD);
-  console.log("Err Movimientos: ",errorsM);
 
   return (
     <>
@@ -166,6 +176,44 @@ const Transactions: NextPage = () => {
                 </FormControl>
 
               </form>
+
+              { operationReport.length>0 &&    
+              <>
+              <Heading as='h3' size='lg' my={5} pr={2}>
+                Movimientos realizados
+              </Heading>
+              <Table variant='striped' colorScheme='teal'>
+                <TableCaption>Consulta realizada el {new Date().toLocaleString()}</TableCaption>
+                <Thead>
+                  <Tr>
+                    <Th>Operadion ID</Th>
+                    <Th>Cliente ID</Th>
+                    <Th>Cuenta ID</Th>
+                    <Th>Nombre</Th>
+                    <Th>Transacción</Th>
+                    <Th>Monto</Th>
+                    <Th>Fecha</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                    { operationReport.map( (rep, i: number) =>{
+                      return (
+                        <Tr>
+                              <Td>{rep.operationID}</Td>
+                              <Td>{rep.clientID}</Td>
+                              <Td>{rep.accountID}</Td>
+                              <Td>{rep.fullName}</Td>
+                              <Td>{rep.transaction}</Td>
+                              <Td>{rep.amount.toLocaleString('es-MX', {minimumFractionDigits: 2})}</Td>
+                              <Td>{new Date(rep.createdAt).toLocaleString()}</Td>
+                        </Tr>
+                      )
+                    })}
+                </Tbody>
+              </Table>
+              </>
+              }
+
             </TabPanel>
 
           </TabPanels>

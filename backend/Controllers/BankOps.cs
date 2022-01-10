@@ -178,6 +178,38 @@ public class BankOpsController : ControllerBase
         }
     }
 
+    // GET: api/BankOps/movements/5/6
+    [HttpGet("movements/{clientid}/{accountid}")]
+    public async Task<ActionResult<IEnumerable<OperationReport>>> GetAccount(long clientid, long accountid)
+    {
+        try
+        {
+            using (var connection = new NpgsqlConnection(_stringConection))
+            {
+                connection.Open();
+                var query = await connection.QueryMultipleAsync(@$"
+                    select o.operationid, o.clientid, a.accountid ,c.fullname, 
+                    t.name as transaction, o.amount, o.createdat from operation o 
+                    join transaction t on t.transactionid=o.transactionid 
+                    join client c on c.clientid=o.clientid 
+                    join account a on a.clientid=c.clientid 
+                    where a.accountid={accountid} and c.clientid={clientid}
+                    order  by o.createdat desc").ConfigureAwait(false); 
+                var report= query.Read<OperationReport>().ToArray();
+                if (report == null)
+                {
+                   return NoContent(); 
+                }
+                return report;
+            }
+        }
+        catch (System.Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+    }
+
 
 }
 // select o.clientid, c.fullname, o.transactionid, t.name, o.amount from operation o join transaction t on t.transactionid=o.transactionid join client c on c.clientid=o.clientid order  by o.createdat;

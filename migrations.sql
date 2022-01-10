@@ -33,7 +33,7 @@ CREATE TABLE transaction (
 );
 
 CREATE TABLE operation (
-    OperartionID SERIAL PRIMARY KEY,
+    OperationID SERIAL PRIMARY KEY,
     ClientID int NOT NULL,
     TransactionID int NOT NULL,
     Amount numeric(9,4),-- ya que hay un limite de 20,000 por transaccion  de efectivo 
