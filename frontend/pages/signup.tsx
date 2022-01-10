@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Heading } from '@chakra-ui/react'
+import { Alert, AlertIcon, Heading } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 
 //import {CheckCircleIcon} from '@chakra-ui/icons'
@@ -14,6 +14,8 @@ import TransactionService from '../services/transaction'
 
 
 const SignUp: NextPage = () => {
+  const [successMsg, setSuccessMsg] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<boolean>(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -24,8 +26,18 @@ const SignUp: NextPage = () => {
     }
     TransactionService.createClient(client).then( (response) => {
       console.log(response);
+      if (!!response && response.statusText === 'Created') {
+        setSuccessMsg(true);
+        setTimeout(() => {
+          setSuccessMsg(false);
+        }, 1000 * 5);
+      }
     }).catch( err =>{
       console.log(err);
+      setErrorMsg(true);
+      setTimeout(() => {
+        setErrorMsg(false);
+      }, 1000 * 5);
     })
   };
 
@@ -75,6 +87,19 @@ const SignUp: NextPage = () => {
             <Button colorScheme='blue' my={3} type="submit">Enviar</Button>
           </FormControl>
         </form>
+
+        { successMsg &&
+          <Alert status='success'>
+            <AlertIcon />
+            Datos guardados correctamente.
+          </Alert>
+        }
+        { errorMsg &&
+          <Alert status='error'>
+            <AlertIcon />
+            Hubo un problema guardando su información.
+          </Alert>
+        }
       </Container>
 
     </>
