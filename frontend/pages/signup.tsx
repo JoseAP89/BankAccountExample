@@ -100,6 +100,7 @@ const SignUp: NextPage = () => {
             Hubo un problema guardando su información.
           </Alert>
         }
+
       </Container>
 
     </>

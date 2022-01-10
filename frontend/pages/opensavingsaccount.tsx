@@ -1,7 +1,9 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Heading } from '@chakra-ui/react'
+import { Alert, AlertIcon, Heading } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
+import Account from '../models/account';
+import TransactionService from '../services/transaction'
 
 //import {CheckCircleIcon} from '@chakra-ui/icons'
 
@@ -12,15 +14,33 @@ import { Container, FormControl,FormLabel,Input,FormHelperText,
 
 
 const OpenSavingsAccount: NextPage = () => {
-
+  const [successMsg, setSuccessMsg] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<boolean>(false);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = (data: any) => {
-    console.log(JSON.stringify(data));
+    let account : Account = {
+      accountid : Number(data.accountid),
+      clientid : Number(data.clientid),
+      totalamount : Number(data.amount),
+    }
+    TransactionService.createAccount(account).then( (response) => {
+      console.log(response);
+      if (!!response && response.statusText === 'Created') {
+        setSuccessMsg(true);
+        setTimeout(() => {
+          setSuccessMsg(false);
+        }, 1000 * 5);
+      }
+    }).catch( err =>{
+      console.log(err);
+      setErrorMsg(true);
+      setTimeout(() => {
+        setErrorMsg(false);
+      }, 1000 * 5);
+    })
     
   };
-  console.log(errors);
-
 
   return (
     <>
@@ -40,14 +60,27 @@ const OpenSavingsAccount: NextPage = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl mt={4}  >
 
-            <FormLabel htmlFor='account'>Número de cuenta</FormLabel>
-            <Input id='account' type='number'  w="45vw" 
-              {...register("account", { required: true, pattern: /^[0-9]+$/i })}
+            <FormLabel htmlFor='clientid'>Número de Identificación</FormLabel>
+            <Input id='clientid' type='number'  w="45vw" 
+              {...register("clientid", { required: true, pattern: /^[0-9]+$/i })}
             />
-            {!!errors?.account  && errors.account.type==="pattern" &&
+            {!!errors?.clientid  && errors.clientid.type==="pattern" &&
+              <div className="error-message">Número de id solo debe tener valores numericos enteros.</div>
+            }
+            {!!errors?.clientid  && errors.clientid.type==="required" &&
+              <div className="error-message">Número de id es requerido.</div>
+            }
+            <FormHelperText>Número proporcionado por su ejecutivo de cuenta al volverse cliente.</FormHelperText>
+
+
+            <FormLabel mt={4} htmlFor='accountid'>Número de cuenta</FormLabel>
+            <Input id='accountid' type='number'  w="45vw" 
+              {...register("accountid", { required: true, pattern: /^[0-9]+$/i })}
+            />
+            {!!errors?.accountid  && errors.accountid.type==="pattern" &&
               <div className="error-message">Número de cuenta solo debe tener valores numericos enteros.</div>
             }
-            {!!errors?.account  && errors.account.type==="required" &&
+            {!!errors?.accountid  && errors.accountid.type==="required" &&
               <div className="error-message">Número de cuenta es requerido.</div>
             }
             <FormHelperText>Número proporcionado por su ejecutivo de cuenta.</FormHelperText>
@@ -55,19 +88,33 @@ const OpenSavingsAccount: NextPage = () => {
 
             <FormLabel htmlFor='amount' mt={4}>Monto inicial de apertura</FormLabel>
             <Input id='amount' type='number' w="45vw"
-              {...register("amount", { required: true, min: 100 })}
+              {...register("amount", { required: true, min: 100 , max: 20_000})}
             />
             {!!errors?.amount  && errors.amount.type=="required" &&
               <div className="error-message">Monto es requerido.</div>
             }
-            {!!errors?.amount  && errors.amount.type==="min" &&
-              <div className="error-message">Monto  debe ser mayor o igual a $100 MN.</div>
+            {!!errors?.amount  && (errors.amount.type==="min" || errors.amount.type==="max")&&
+              <div className="error-message">Monto  debe ser mayor o igual a $100 y menor o igual $20,000 MN.</div>
             }
             <FormHelperText>Monto de apertura de la cuenta de ahorros.</FormHelperText>
 
             <Button colorScheme='blue' my={3} type="submit">Enviar</Button>
           </FormControl>
         </form>
+
+        { successMsg &&
+          <Alert status='success'>
+            <AlertIcon />
+            Datos guardados correctamente.
+          </Alert>
+        }
+        { errorMsg &&
+          <Alert status='error'>
+            <AlertIcon />
+            Hubo un problema guardando su información.
+          </Alert>
+        }
+
       </Container>
 
     </>

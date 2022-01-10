@@ -9,14 +9,14 @@ DROP TABLE IF EXISTS client;
 
 CREATE TABLE client (
     ClientID int PRIMARY KEY,
-    FullName varchar(80),
+    FullName varchar(80) NOT NULL,
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP
 );
 
 CREATE TABLE Account (
     AccountID int PRIMARY KEY,
-    TotalAmount numeric(14,4),
+    TotalAmount numeric(14,4) NOT NULL,
     ClientID int NOT NULL,
     CreatedAt TIMESTAMP NOT NULL DEFAULT NOW(),
     ModifiedAt TIMESTAMP,

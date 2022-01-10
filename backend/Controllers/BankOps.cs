@@ -111,7 +111,7 @@ public class BankOpsController : ControllerBase
                 {
                     return BadRequest("No existe el cliente con id " + account.ClientID + ". Solo se pueden crear cuentas de ahorro para clientes existentes.");
                 }
-                string sqlQuery = "Insert Into account (AccountID, ClientID, TotalAmount) Values(@AccountID, @ClientID, @TotalAccount)";
+                string sqlQuery = "Insert Into account (AccountID, ClientID, TotalAmount) Values(@AccountID, @ClientID, @TotalAmount)";
                 int rowsAffected = await connection.ExecuteAsync(sqlQuery,
                     new {
                         AccountID = account.AccountID,
@@ -124,7 +124,7 @@ public class BankOpsController : ControllerBase
                    return NoContent(); 
                 }
                 return CreatedAtAction(
-                    nameof(GetClient),
+                    nameof(GetAccount),
                     new { accountid = account.AccountID },
                     account
                 );
