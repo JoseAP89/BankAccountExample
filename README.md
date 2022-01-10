@@ -15,3 +15,7 @@ Se requiere:
    * Una pantalla (o las que consideres) para realizar Depósitos y Retiros. Atributos mínimos: Monto de la transacción y número de la cuenta.
 
    * Alguna forma de ver un historial de estas transacciones, puede ser un reporte, o simplemente ver directamente en el repositorio de datos el cómo se van registrando y cómo se afecta el saldo de la cuenta.
+
+## Diagrama de clases de la BD
+
+![picture alt](https://github.com/JoseAP89/BankAccountExample/blob/main/diagrama_clases.png "diagrama")
