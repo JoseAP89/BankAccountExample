@@ -48,9 +48,11 @@ const Transactions: NextPage = () => {
 
   const onSubmitM = (data: any) => {
     TransactionService.getOperationReport(data.clientid, data.accountid).then( (response) => {
-      if (!!response?.data && response.data.lenght>0) {
+      console.log(!!response?.data);
+      console.log(response.data);
+      if (!!response?.data && response.data.length>0) {
         setOperationReport(response.data as Array<OperationReport>);
-      } else if(!!response?.data || response.data.lenght==0){
+      } else {
         setErrorMsg(true);
         setTimeout(() => {
           setErrorMsg(false);
@@ -206,7 +208,7 @@ const Transactions: NextPage = () => {
                 <Tbody>
                     { operationReport.map( (rep, i: number) =>{
                       return (
-                        <Tr>
+                        <Tr key={i}>
                               <Td>{rep.operationID}</Td>
                               <Td>{rep.clientID}</Td>
                               <Td>{rep.accountID}</Td>
@@ -221,6 +223,8 @@ const Transactions: NextPage = () => {
               </Table>
               </>
               }
+
+
               { errorMsg &&
                 <Alert status='error'>
                   <AlertIcon />
