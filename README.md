@@ -18,7 +18,7 @@ Se requiere:
 
 ## Diagrama de clases de la BD
 
-![picture alt](https://github.com/JoseAP89/BankAccountExample/blob/main/diagrama_clases.png "diagrama")
+![picture alt](https://github.com/JoseAP89/BankAccountExample/blob/main/img/diagrama_clases.png "diagrama")
 
 ## Instrucciones de instalación en local
 
