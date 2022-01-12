@@ -7,17 +7,17 @@ const StyledNavBar = styled.div`
     display: flex;
     flex-direction: row;
 }
-.topnav .tab-nav{
+.topnav a.tab-nav{
     display: flex;
     align-items: center;
       
 }
-.topnav .tab-nav a {
-    color: #eaeaea;
+.topnav a.tab-nav {
+    color: white !important;
     padding: 20px;
     font-size: 20px;
 } 
-.topnav .tab-nav:hover {
+.topnav a.tab-nav:hover {
     background-color: #778899;
 }
 
@@ -29,7 +29,7 @@ const StyledNavBar = styled.div`
 	    height:fit-content;
 	}
     
-    .topnav .tab-nav{
+    .topnav a.tab-nav{
         height: 36px;
         display: flex;
         align-items: center;

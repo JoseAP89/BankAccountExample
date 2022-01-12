@@ -1,4 +1,5 @@
 import {StyledNavBar} from './Styled'
+import Link from 'next/link'
 
 interface NavigationElement {
   title: string;
@@ -18,9 +19,9 @@ const NavigationBar = () => {
 	        <div className="topnav">
 	          { menuList.map( (m,i) =>{
 	              return (
-	                <div className="tab-nav" key={i}>
-	                  <a  href={m.url}>{m.title}</a>
-	                </div>
+	              	<Link href={m.url} key={i}>
+	              		<a className="tab-nav" style={{color:"blue"}}>{m.title}</a>
+	              	</Link>
 	              )
 	            })
 	          }

@@ -4,6 +4,7 @@ import { Alert, AlertIcon, Heading } from '@chakra-ui/react'
 import { useForm } from "react-hook-form";
 import Account from '../models/account';
 import TransactionService from '../services/transaction'
+import Link from 'next/link'
 
 //import {CheckCircleIcon} from '@chakra-ui/icons'
 
@@ -55,7 +56,9 @@ const OpenSavingsAccount: NextPage = () => {
         <Heading as="h2" size="md">Crea una cuenta de ahorro en unos pocos pasos.</Heading>
 
         <p>Como requisito se necesita ser cliente de la institucion.</p>
-        <p>Si aun no lo eres <a style={{color:"blue"}} href="/signup">click aqui</a> para volverte nuestro cliente.</p>
+        <p>
+          Si aun no lo eres <Link href="/signup"><a style={{color:"blue"}}>click aqui</a></Link> para volverte nuestro cliente.
+        </p>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl mt={4}  >
