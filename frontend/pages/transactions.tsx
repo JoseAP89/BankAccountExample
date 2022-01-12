@@ -54,12 +54,14 @@ const Transactions: NextPage = () => {
         setOperationReport(response.data as Array<OperationReport>);
       } else {
         setErrorMsg(true);
+        setOperationReport([]);
         setTimeout(() => {
           setErrorMsg(false);
         }, 1000 * 5);
       }
     }).catch( err =>{
       console.log(err);
+      setOperationReport([]);
       setErrorMsg(true);
       setTimeout(() => {
         setErrorMsg(false);
