@@ -29,3 +29,30 @@ Se requiere:
 * Después correr el archivo migrations.sql en la base de datos, que creará todas las tablas, procedimientos, triggers y otorgara los permisios necesarios al usuario 'bank'.
 * Correr el back con el commando dotnet run y en la carpeta de front el comando npm run start.
 * Ir a localhost:3000 para comenzar a usar la app.
+
+## Pantallas de la UI
+
+### Inicio
+
+![picture alt](https://github.com/JoseAP89/BankAccountExample/blob/main/img/index.png "pantalla de inicio")
+
+### Crear cliente
+
+![picture alt](https://github.com/JoseAP89/BankAccountExample/blob/main/img/signUpClient.png "crear cliente")
+
+### Crear cuenta de ahorro
+
+![picture alt](https://github.com/JoseAP89/BankAccountExample/blob/main/img/signUpAccount.png "crear cuenta de ahorro")
+
+### Depósitos y Retiros
+
+![picture alt](https://github.com/JoseAP89/BankAccountExample/blob/main/img/deposits_withdraws.png "depositos y retiros")
+
+### Movimientos
+
+![picture alt](https://github.com/JoseAP89/BankAccountExample/blob/main/img/movements.png "movimientos")
+
+### Tabla de los movimientos de la cuenta
+
+![picture alt](https://github.com/JoseAP89/BankAccountExample/blob/main/img/movementsTable.png "tabla de movimientos")
+
